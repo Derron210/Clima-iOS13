@@ -21,9 +21,14 @@ struct WeatherManager {
         performRequest(urlString);
     }
     
+    func fetchWeather(longitude: Double, latitude: Double) {
+        let urlString = "\(weatherURL)&lat=\(latitude)&lon=\(longitude)";
+        performRequest(urlString);
+    }
+    
     var delegate: WeatherManagerDelegate?;
     
-    func performRequest(_ urlString: String) {
+    private func performRequest(_ urlString: String) {
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default);
             let task = session.dataTask(with: url) {(data, response, error) in
@@ -43,7 +48,7 @@ struct WeatherManager {
         }
     }
     
-    func parseJSON(weatherData: Data) -> WeatherModel? {
+    private func parseJSON(weatherData: Data) -> WeatherModel? {
         let decoder = JSONDecoder();
         do {
             let decodedData = try decoder.decode(WeatherData.self, from: weatherData);
